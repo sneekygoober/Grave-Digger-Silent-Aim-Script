@@ -1,2 +1,3 @@
 # Grave-Digger-Silent-Aim-Script
-This is a basic silent aim with no UI for https://www.roblox.com/games/18259975825/Grave-Digger.  Please note that your executor must at least support hookfunction and require. 
+This script is open-source and free. Anyone can modify/use this script without restrictions.
+You can also view this script over at [scriptblox.com](https://scriptblox.com/script/GraveDigger-Silent-Aim-Keyless-98292) or [haxhell.com](https://haxhell.com/scripts/gravedigger-gravedigger-silent-aim-keyless).

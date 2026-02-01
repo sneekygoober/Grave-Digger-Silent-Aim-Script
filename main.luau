@@ -12,7 +12,7 @@ end;
 local RS: ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"));
 local Players = game:GetService("Players");
 
-local plr = Players.LocalPlayer;
+local plr = cloneref(Players).LocalPlayer;
 local cam = workspace.CurrentCamera;
 
 local mouse = plr:GetMouse();

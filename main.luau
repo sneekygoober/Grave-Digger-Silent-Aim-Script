@@ -78,9 +78,9 @@ local getTarget = function()
 end;
 
 local old; old = clonefunction(hookfunction(bfuncs.raycastline, newcclosure(function(_, args)
-    if rawget(args, "bullet") then
+    if rawget(args, "bullet") and rawget(args, "point") and rawget(args, "destination") then
         local c = getTarget();
-        if c and rawget(args, "point") and rawget(args, "destination") then
+        if c then
             local _args = args;
             _args.destination = c.Position - _args.point;
             return old(_, _args);

@@ -10,9 +10,9 @@ if not (hookfunction and require) then
 end;
 
 local RS: ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"));
-local Players = game:GetService("Players");
+local Players: Players = cloneref(game:GetService("Players"));
 
-local plr = cloneref(Players).LocalPlayer;
+local plr = Players.LocalPlayer;
 local cam = workspace.CurrentCamera;
 
 local mouse = plr:GetMouse();

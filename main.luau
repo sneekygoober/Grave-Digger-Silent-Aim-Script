@@ -22,7 +22,7 @@ if not s then
     return warn(executor .. " returned an error while trying to require RS.shared.bFunctions:\n" .. bfuncs);
 end;
 
-local isVisible = function(part: BasePart): (boolean, Instance?)
+local isVisible = function(part: BasePart, origin: Vector3): (boolean, Instance?)
     local char = plr.Character;
     if not char then return false, nil; end;
 
@@ -30,8 +30,6 @@ local isVisible = function(part: BasePart): (boolean, Instance?)
     rp.FilterType = Enum.RaycastFilterType.Exclude;
     rp.FilterDescendantsInstances = {char};
     rp.IgnoreWater = true;
-
-    local origin = cam.CFrame.Position;
 
     local dir = part.Position - origin;
     local result: RaycastResult = workspace:Raycast(origin, dir, rp);
@@ -44,7 +42,7 @@ local isVisible = function(part: BasePart): (boolean, Instance?)
     return false, result.Instance;
 end;
 
-local getTarget = function()
+local getTarget = function(origin: Vector3)
     local cPart, cDistance = nil, math.huge;
 
     for _, player: Player in next, Players:GetChildren() do
@@ -59,9 +57,9 @@ local getTarget = function()
         local pos, onScreen = cam:WorldToViewportPoint(tPart.Position);
         if not onScreen then continue; end;
 
-        local v, nTPart = isVisible(tPart);
+        local v, nTPart = isVisible(tPart, origin);
         if not v then
-            v, nTPart = isVisible(char.PrimaryPart or char:FindFirstChild("characterhitbox"));
+            v, nTPart = isVisible(char.PrimaryPart or char:FindFirstChild("characterhitbox"), origin);
             if not v then continue; end;
         end;
 
@@ -73,13 +71,13 @@ local getTarget = function()
             cDistance = distance;
         end;
     end;
-
+    
     return cPart;
 end;
 
 local old; old = clonefunction(hookfunction(bfuncs.raycastline, newcclosure(function(_, args)
     if rawget(args, "bullet") and rawget(args, "point") and rawget(args, "destination") then
-        local c = getTarget();
+        local c = getTarget(args.point);
         if c then
             local _args = args;
             _args.destination = c.Position - _args.point;

@@ -75,7 +75,7 @@ local getTarget = function(origin: Vector3)
     return cPart;
 end;
 
-local old; old = clonefunction(hookfunction(bfuncs.raycastline, newcclosure(function(_, args)
+local old; old = clonefunction(hookfunction(rawget(bfuncs, "raycastline"), newcclosure(function(_, args)
     if rawget(args, "bullet") and rawget(args, "point") and rawget(args, "destination") then
         local c = getTarget(rawget(args, "point"));
         if c then

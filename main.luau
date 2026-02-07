@@ -90,4 +90,4 @@ local old; old = clonefunction(hookfunction(rawget(bfuncs, "raycastline"), newcc
     return old(_, args);
 end)));
 
-SG["success"]("Silent aim successfully executed!\n\nIf you have any issues press F9 or type /console in chat and then send me a screenshot of the console.\n\nDO NOT EXECUTE MORE THAN ONCE IN A SERVER!");
+SG["success"]("Silent aim successfully executed!\nIf you have any issues press F9 or type /console in chat and then send me a screenshot of the console.");

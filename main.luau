@@ -55,10 +55,11 @@ local getTarget = function(origin: Vector3)
         if not char or char:FindFirstChildOfClass("ForceField") or (char:FindFirstChild("Humanoid") and char.Humanoid.Health <= 0) then continue; end;
 
         local tPart: BasePart?
+		local _ = char:FindFirstChild("characterhitbox") or char.PrimaryPart;
         if char:FindFirstChild("helmet") then
-            tPart = char:FindFirstChild("HeadHitbox");
+            tPart = char:FindFirstChild("HeadHitbox") or _;
         else
-            tPart = char:FindFirstChild("characterhitbox") or char.PrimaryPart;
+            tPart = _;
         end;
 
         if not tPart then continue; end;
@@ -67,7 +68,7 @@ local getTarget = function(origin: Vector3)
 
         local v, nTPart = isVisible(tPart, origin);
         if not v then
-            v, nTPart = isVisible(__, origin);
+            v, nTPart = isVisible(_, origin);
             if not v then continue; end;
         end;
 

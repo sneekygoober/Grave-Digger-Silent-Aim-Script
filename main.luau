@@ -54,7 +54,7 @@ local getTarget = function(origin: Vector3)
         local char = player.Character;
         if not char or char:FindFirstChildOfClass("ForceField") or (char:FindFirstChild("Humanoid") and char.Humanoid.Health <= 0) then continue; end;
 
-        local tPart: BasePart = char:FindFirstChild("HeadHitbox") or char.PrimaryPart or char:FindFirstChild("characterhitbox");
+        local tPart: BasePart = char:FindFirstChild("HeadHitbox") or char:FindFirstChild("characterhitbox") or char.PrimaryPart;
         if not tPart then continue; end;
 
         local pos, onScreen = cam:WorldToViewportPoint(tPart.Position);
@@ -62,7 +62,7 @@ local getTarget = function(origin: Vector3)
 
         local v, nTPart = isVisible(tPart, origin);
         if not v then
-            v, nTPart = isVisible(char.PrimaryPart or char:FindFirstChild("characterhitbox"), origin);
+            v, nTPart = isVisible(char:FindFirstChild("characterhitbox") or char.PrimaryPart, origin);
             if not v then continue; end;
         end;
 

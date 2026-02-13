@@ -57,9 +57,9 @@ local getTarget = function(origin: Vector3)
         local tPart: BasePart?
 		local _ = char:FindFirstChild("characterhitbox") or char.PrimaryPart;
         if char:FindFirstChild("helmet") then
-            tPart = char:FindFirstChild("HeadHitbox") or _;
-        else
             tPart = _;
+        else
+            tPart = char:FindFirstChild("HeadHitbox") or _;
         end;
 
         if not tPart then continue; end;

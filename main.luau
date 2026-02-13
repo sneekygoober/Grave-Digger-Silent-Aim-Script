@@ -27,7 +27,7 @@ end;
 
 local isVisible = function(part: BasePart, origin: Vector3): (boolean, Instance?)
     local char = plr.Character;
-    if not char then return false, nil; end;
+    if not (char and part) then return false, nil; end;
 
     local rp = RaycastParams.new();
     rp.FilterType = Enum.RaycastFilterType.Exclude;
@@ -54,15 +54,20 @@ local getTarget = function(origin: Vector3)
         local char = player.Character;
         if not char or char:FindFirstChildOfClass("ForceField") or (char:FindFirstChild("Humanoid") and char.Humanoid.Health <= 0) then continue; end;
 
-        local tPart: BasePart = char:FindFirstChild("HeadHitbox") or char:FindFirstChild("characterhitbox") or char.PrimaryPart;
-        if not tPart then continue; end;
+        local tPart: BasePart?
+        if char:FindFirstChild("helmet") then
+            tPart = char:FindFirstChild("HeadHitbox");
+        else
+            tPart = char:FindFirstChild("characterhitbox") or char.PrimaryPart;
+        end;
 
+        if not tPart then continue; end;
         local pos, onScreen = cam:WorldToViewportPoint(tPart.Position);
         if not onScreen then continue; end;
 
         local v, nTPart = isVisible(tPart, origin);
         if not v then
-            v, nTPart = isVisible(char:FindFirstChild("characterhitbox") or char.PrimaryPart, origin);
+            v, nTPart = isVisible(__, origin);
             if not v then continue; end;
         end;
 

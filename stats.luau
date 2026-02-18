@@ -1,0 +1,41 @@
+return {
+	["Anti-Materiel Rifle"] = 5,
+
+	["'Judgement' Breech Rifle"] = 4,
+	["'Kingslayer' Percussion Revolver"] = 4,
+
+	["'Volk' Sniper Rifle"] = 3,
+	["'Prince' Long Rifle"] = 3,
+	["'Whisper' Silenced Rifle"] = 3,
+	["Flyboy Rifle"] = 3,
+	["'Jesse' Combat Rifle"] = 3,
+	["Precision Rifle"] = 3,
+	["'Adjudicator' Repeating Rifle"] = 3,
+	["'Judgement' Incendiary Rifle"] = 3,
+	["Bulwark Machine Gun"] = 3,
+	["Ghost Rifle"] = 3,
+
+	["'Talon' Army Revolver"] = 2,
+	["Cavalry Revolver"] = 2,
+	["'Grace' Service Revolver"] = 2,
+	["'Crestfall' Lever Rifle"] = 2,
+	["Ranger Rifle"] = 2,
+	["'Auclair' Lever Pistol"] = 2,
+	["'Equine' Riding Shotgun"] = 2,
+	["Sawed Shotgun"] = 2,
+	["'Knell' Silenced Revolver"] = 2,
+	["Bandit Revolver"] = 2,
+	["'Hellion' Automatic Shotgun"] = 2,
+	["Heavy Shotgun"] = 2,
+	["'Volk' Frontline Rifle"] = 2,
+	["Trench Shotgun"] = 2,
+	["Radio Carbine"] = 2,
+
+	["'Union' Military Pistol"] = 1,
+	["Stocked Pistol"] = 1,
+	["'Negotiator' Pocket Shotgun"] = 1,
+	["Long Shotgun"] = 1,
+	["Storm Gun"] = 1,
+
+	["'Honour' Duty Pistol"] = 0,
+};

@@ -19,7 +19,7 @@ local UIS: UserInputService = cloneref(game:GetService("UserInputService"));
 local plr = Players.LocalPlayer;
 local cam = workspace.CurrentCamera;
 
-local mouse: Mouse;
+local mouse: Mouse?;
 if not UIS.TouchEnabled and UIS.MouseEnabled and UIS.KeyboardEnabled then
     mouse = plr:GetMouse();
 end;

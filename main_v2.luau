@@ -60,7 +60,7 @@ local getTarget = function(origin: Vector3)
 	local gun = plr.Character and plr.Character:FindFirstChildOfClass("Tool");
 	if not gun then return; end;
 
-    for _, player: Player in next, Players:GetChildren() do
+    for _, player: Player in next, Players:GetPlayers() do
         if player == plr or player.Team == plr.Team then continue; end;
 
         local char = player.Character;

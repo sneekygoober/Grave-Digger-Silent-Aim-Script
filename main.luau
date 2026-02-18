@@ -14,11 +14,15 @@ end;
 
 local RS: ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"));
 local Players: Players = cloneref(game:GetService("Players"));
+local UIS: UserInputService = cloneref(game:GetService("UserInputService"));
 
 local plr = Players.LocalPlayer;
 local cam = workspace.CurrentCamera;
 
-local mouse = plr:GetMouse();
+local mouse: Mouse?;
+if not UIS.TouchEnabled and UIS.MouseEnabled and UIS.KeyboardEnabled then
+    mouse = plr:GetMouse();
+end;
 
 local s, bfuncs = pcall(require, RS.shared.bFunctions);
 if not s then

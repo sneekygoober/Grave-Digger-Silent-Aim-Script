@@ -38,14 +38,15 @@ if not cm then
     return warn(err);
 end;
 
+local rp = RaycastParams.new();
+rp.FilterType = Enum.RaycastFilterType.Exclude;
+rp.IgnoreWater = true;
+
 local isVisible = function(part: BasePart, origin: Vector3): (boolean, Instance?)
     local char = plr.Character;
     if not (char and part) then return false, nil; end;
-
-    local rp = RaycastParams.new();
-    rp.FilterType = Enum.RaycastFilterType.Exclude;
-    rp.FilterDescendantsInstances = {char};
-    rp.IgnoreWater = true;
+    
+    rp.FilterDescendantsInstances = {char, part.Parent:FindFirstChild("bullet_whizz")};
 
     local dir = part.Position - origin;
     local result: RaycastResult = workspace:Raycast(origin, dir, rp);
@@ -107,7 +108,7 @@ local getTarget = function(origin: Vector3)
             if not v then continue; end;
         end;
 
-        if nTPart and nTPart.Name ~= "bullet_whizz" then tPart = nTPart; end;
+        if nTPart then tPart = nTPart; end;
 
         local distance = mouse and (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).Magnitude or Vector2.new(pos.X, pos.Y).Magnitude;
         if distance < cDistance then

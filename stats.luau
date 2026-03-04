@@ -1,5 +1,7 @@
 return {
 	["Anti-Materiel Rifle"] = 5,
+	["'Heavens Door'"] = 5,
+	["'Hells Gate'"] = 5,
 
 	["'Judgement' Breech Rifle"] = 4,
 	["'Kingslayer' Percussion Revolver"] = 4,
@@ -14,6 +16,10 @@ return {
 	["'Judgement' Incendiary Rifle"] = 3,
 	["Bulwark Machine Gun"] = 3,
 	["Ghost Rifle"] = 3,
+	["'Der Albtraum'"] = 3,
+	["'Der Verfolger'"] = 3,
+	["Sword and Shield'"] = 3,
+	["'Heart of Steel'"] = 3,
 
 	["'Talon' Army Revolver"] = 2,
 	["Cavalry Revolver"] = 2,
@@ -30,12 +36,16 @@ return {
 	["'Volk' Frontline Rifle"] = 2,
 	["Trench Shotgun"] = 2,
 	["Radio Carbine"] = 2,
+	["'Commissar's Gift'"] = 2,
+	["'Commissar's Will'"] = 2,
 
 	["'Union' Military Pistol"] = 1,
 	["Stocked Pistol"] = 1,
 	["'Negotiator' Pocket Shotgun"] = 1,
 	["Long Shotgun"] = 1,
 	["Storm Gun"] = 1,
+	["'Breath of God'"] = 1,
+	["'The Reaper'"] = 1,
 
 	["'Honour' Duty Pistol"] = 0,
 };

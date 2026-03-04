@@ -30,9 +30,15 @@ if not s then
 end;
 
 local stats = loadstring(game:HttpGet("https://raw.githubusercontent.com/sneekygoober/Grave-Digger-Silent-Aim-Script/refs/heads/main/stats.luau"))();
+local bodyparts = {
+    "Right Arm",
+    "Left Arm",
+    "Right Leg",
+    "Left Leg",
+};
 
-local cm = workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("conscriptmode");
-if not cm then
+local cm, nation_team, empire_team = workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("conscriptmode"), workspace:FindFirstChild("nation_team"), workspace:FindFirstChild("empire_team");
+if not (cm and nation_team and empire_team) then
     local err = "Script needs updating";
     SG["error"](err);
     return warn(err);
@@ -42,70 +48,79 @@ local rp = RaycastParams.new();
 rp.FilterType = Enum.RaycastFilterType.Exclude;
 rp.IgnoreWater = true;
 
-local isVisible = function(part: BasePart, origin: Vector3): (boolean, Instance?)
+local isVisible = function(part: BasePart, origin: Vector3): (boolean, Instance?, boolean)
     local char = plr.Character;
-    if not (char and part) then return false, nil; end;
+    if not (char and part) then return false, nil, false; end;
     
-    rp.FilterDescendantsInstances = {char, part.Parent:FindFirstChild("bullet_whizz")};
+    rp.FilterDescendantsInstances = {char, part.Parent:FindFirstChild("bullet_whizz"), char.Parent};
 
     local dir = part.Position - origin;
     local result: RaycastResult = workspace:Raycast(origin, dir, rp);
-    if not result then return true, nil; end;
+    if not result then return true, nil, false; end;
 
     if result.Instance:IsDescendantOf(part.Parent) then
-        return true, result.Instance;
+        if (result.Instance.Parent.Name == "vanguardshield1" and result.Instance.Parent:FindFirstChild("hitbox")) or (result.Instance.Parent.Parent.Name == "vanguardshield1" and result.Instance.Parent.Parent:FindFirstChild("hitbox")) then
+            local ins = result.Instance.Parent.Name == "vanguardshield1" and result.Instance.Parent or result.Instance.Parent.Parent;
+            local sh = ins:FindFirstChild("special") and ins.special:FindFirstChild("topshield");
+            if sh and sh:FindFirstChild("health") and sh.health.Value > 0 then
+                local dp = sh:FindFirstChild("damagepart");
+                return true, dp, false;
+            else
+                return true, part.Parent:FindFirstChild("HeadHitbox"), true;
+            end;
+        end;
+        return true, result.Instance, false;
     end;
 
-    return false, result.Instance;
+    return false, result.Instance, false;
 end;
 
 local getTarget = function(origin: Vector3)
-    local cPart, cDistance = nil, getgenv().fov or 300;
+    local cPart, cDistance, offset = nil, getgenv().fov or 300, false;
 
 	local gun = plr.Character and plr.Character:FindFirstChildOfClass("Tool");
 	if not gun then return; end;
 
-    for _, player: Player in next, Players:GetPlayers() do
-        if player == plr or player.Team == plr.Team then continue; end;
+    local eFolder: Folder = plr.Character.Parent == empire_team and nation_team or empire_team;
 
-        local char = player.Character;
-        if not char or (char:FindFirstChild("Humanoid") and char.Humanoid.Health <= 0) then continue; end;
+    for _, char: Model in next, eFolder:GetChildren() do
+        if char:FindFirstChild("Humanoid") and char.Humanoid.Health <= 0 then continue; end;
 
         local tPart: BasePart?
-		local _ = char:FindFirstChild("characterhitbox") or char.PrimaryPart;
-		local __ = char:FindFirstChild("HeadHitbox") or _;
-		if cm.Value then
-			tPart = __
+		local root = char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart;
+		local head = char:FindFirstChild("HeadHitbox") or root;
+		if cm.Value or not char:FindFirstChild("helmet") then
+			tPart = head;
 		else
-			if not char:FindFirstChild("helmet") then
-				tPart = __
-			else
-				local pl = stats[gun.Name]
-				local class: string? = (player:FindFirstChild("playerstats") and player.playerstats:FindFirstChild("class") and player.playerstats.class.Value) or (char:FindFirstChild("class") and char.class.Value);
-				if not (pl and class) then
-					tPart = _;
-				else
-					class = class:lower();
-					if class == "lancer" then
-						tPart = (pl == 5) and __ or _;
-					elseif class == "vanguard" then
-						pl -= 1
-						tPart = (pl <= 2) and _ or __;
-					else
-						tPart = (pl <= 2) and _ or __;
-					end;
-				end;
-			end;
+            local pl = stats[gun.Name] or 2;
+            local class: string? = char:FindFirstChild("class") and char.class.Value;
+            if not pl or not class then
+                tPart = root;
+            else
+                if class == "lancer" then
+                    tPart = (pl == 5) and head or root;
+                elseif class == "vanguard" then
+                    tPart = (pl >= 3) and head or root;
+                else
+                    tPart = (pl >= 2) and head or root;
+                end;
+            end;
 		end;
 
         if not tPart then continue; end;
         local pos, onScreen = cam:WorldToViewportPoint(tPart.Position);
         if not onScreen then continue; end;
 
-        local v, nTPart = isVisible(tPart, origin);
+        local v, nTPart, o = isVisible(tPart, origin);
         if not v then
-            v, nTPart = isVisible(_, origin);
-            if not v then continue; end;
+            v, nTPart, o = isVisible(root, origin);
+            if not v then
+                for _, _v in ipairs(bodyparts) do
+                    v, nTPart, o = isVisible(char:FindFirstChild(_v), origin);
+                    if v then break; end;
+                end;
+                if not v then continue; end;
+            end;
         end;
 
         if nTPart then tPart = nTPart; end;
@@ -113,21 +128,23 @@ local getTarget = function(origin: Vector3)
         local distance = mouse and (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).Magnitude or Vector2.new(pos.X, pos.Y).Magnitude;
         if distance < cDistance then
             cPart = tPart;
+            offset = o;
             cDistance = distance;
         end;
     end;
     
-    return cPart;
+    return cPart, offset;
 end;
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sneekygoober/sneeky-s-fov-lib/refs/heads/main/main.luau"))()(getgenv().fov or 300, getTarget);
 
 local old; old = clonefunction(hookfunction(rawget(bfuncs, "raycastline"), newcclosure(function(_, args)
     if rawget(args, "bullet") and rawget(args, "point") and rawget(args, "destination") then
-        local c = getTarget(rawget(args, "point"));
+        local c, offset = getTarget(rawget(args, "point"));
         if c then
             local _args = args;
-            _args.destination = c.Position - _args.point;
+            local pos = c.CFrame;
+            _args.destination = (offset and pos:PointToWorldSpace(Vector3.new(0, c.Size.Y/2, 0)) or pos.Position) - _args.point;
             return old(_, _args);
         end;
     end;

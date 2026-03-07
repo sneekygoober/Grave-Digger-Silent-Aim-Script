@@ -32,6 +32,7 @@ return {
 	["'Knell' Silenced Revolver"] = 2,
 	["Bandit Revolver"] = 2,
 	["'Hellion' Automatic Shotgun"] = 2,
+	["'Hellion' Heavy Shotgun"] = 2,
 	["Heavy Shotgun"] = 2,
 	["'Volk' Frontline Rifle"] = 2,
 	["Trench Shotgun"] = 2,

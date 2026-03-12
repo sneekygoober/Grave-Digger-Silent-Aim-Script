@@ -32,8 +32,8 @@ local bodyparts = {
     "Left Leg",
 };
 
-local cm, nation_team, empire_team = workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("conscriptmode"), workspace:FindFirstChild("nation_team"), workspace:FindFirstChild("empire_team");
-if not (cm and nation_team and empire_team) then
+local cm, nation_team, empire_team, nt, b, obj = workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("conscriptmode"), workspace:FindFirstChild("nation_team"), workspace:FindFirstChild("empire_team"), workspace:FindFirstChild("notarget"), workspace:FindFirstChild("bodies"), workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("objectives");
+if not (cm and nation_team and empire_team and nt and b and obj) then
     local err = "Script needs updating";
     SG["error"](err);
     return warn(err);
@@ -47,7 +47,12 @@ local isVisible = function(part: BasePart, origin: Vector3): (boolean, Instance?
     local char = plr.Character;
     if not (char and part) then return false, nil, false; end;
     
-    rp.FilterDescendantsInstances = {char, part.Parent:FindFirstChild("bullet_whizz"), char.Parent};
+    rp.FilterDescendantsInstances = {char, part.Parent:FindFirstChild("bullet_whizz"), char.Parent, nt, b};
+    for _, v in next, obj:GetChildren() do
+        if v:FindFirstChild("capture") then
+            rp.FilterDescendantsInstances[#rp.FilterDescendantsInstances+1] = v.capture;
+        end;
+    end;
 
     local dir = part.Position - origin;
     local result: RaycastResult = workspace:Raycast(origin, dir, rp);
@@ -82,7 +87,7 @@ local getTarget = function(origin: Vector3)
         if char:FindFirstChild("Humanoid") and char.Humanoid.Health <= 0 then continue; end;
 
         local tPart: BasePart?
-		local root = char:FindFirstChild("HumanoidRootPart") or char.PrimaryPart;
+		local root = char:FindFirstChild("Torso") or char.PrimaryPart;
 		local head = char:FindFirstChild("HeadHitbox") or root;
 		if cm.Value or not char:FindFirstChild("helmet") then
 			tPart = head;

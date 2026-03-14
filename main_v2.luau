@@ -32,8 +32,8 @@ local bodyparts = {
     "Left Leg",
 };
 
-local cm, nation_team, empire_team, nt, b, obj = workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("conscriptmode"), workspace:FindFirstChild("nation_team"), workspace:FindFirstChild("empire_team"), workspace:FindFirstChild("notarget"), workspace:FindFirstChild("bodies"), workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("objectives");
-if not (cm and nation_team and empire_team and nt and b and obj) then
+local cm, nation_team, empire_team, nt, b, obj, throw = workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("conscriptmode"), workspace:FindFirstChild("nation_team"), workspace:FindFirstChild("empire_team"), workspace:FindFirstChild("notarget"), workspace:FindFirstChild("bodies"), workspace:FindFirstChild("serverStuff") and workspace.serverStuff:FindFirstChild("objectives"), workspace:FindFirstChild("throwables");
+if not (cm and nation_team and empire_team and nt and b and obj and throw) then
     local err = "Script needs updating";
     SG["error"](err);
     return warn(err);
@@ -47,7 +47,7 @@ local isVisible = function(part: BasePart, origin: Vector3): (boolean, Instance?
     local char = plr.Character;
     if not (char and part) then return false, nil, false; end;
     
-    rp.FilterDescendantsInstances = {char, part.Parent:FindFirstChild("bullet_whizz"), char.Parent, nt, b};
+    rp.FilterDescendantsInstances = {char, part.Parent:FindFirstChild("bullet_whizz"), char.Parent, nt, b, throw};
     for _, v in next, obj:GetChildren() do
         if v:FindFirstChild("capture") then
             rp.FilterDescendantsInstances[#rp.FilterDescendantsInstances+1] = v.capture;
@@ -89,7 +89,7 @@ local getTarget = function(origin: Vector3)
         local tPart: BasePart?
 		local root = char:FindFirstChild("Torso") or char.PrimaryPart;
 		local head = char:FindFirstChild("HeadHitbox") or root;
-		if cm.Value or not char:FindFirstChild("helmet") then
+		if cm.Value or not char:FindFirstChild("helmet") or char:FindFirstChild("helmetgone") then
 			tPart = head;
 		else
             local pl = stats[gun.Name] or 2;
